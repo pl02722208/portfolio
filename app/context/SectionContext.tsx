@@ -11,20 +11,20 @@ interface SectionContextType {
 const SectionContext = createContext<SectionContextType | undefined>(undefined);
 
 export function SectionProvider({ children }: { children: ReactNode }) {
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
   const searchParams = useSearchParams();
-  const [activeSection, setActiveSection] = useState<string | null>(searchParams.get("section"));
 
   // Handle back/forward button clicks
   useEffect(() => {
     const handlePopState = () => {
       const section = new URLSearchParams(window.location.search).get("section");
-      // const section = searchParams.get("section");
       if (section) {
         setActiveSection(section);
       }
     };
 
-    window.addEventListener("pagehide", handlePopState);
+    window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
@@ -38,7 +38,7 @@ export function SectionProvider({ children }: { children: ReactNode }) {
 
   // Handle smooth scrolling when activeSection changes
   useEffect(() => {
-    if (activeSection && activeSection != searchParams.get("section")) {
+    if (activeSection) {
       // Use setTimeout to ensure DOM has updated
       setTimeout(() => {
         document.getElementById(activeSection)?.scrollIntoView({behavior: "smooth"});
