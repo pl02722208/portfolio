@@ -1,103 +1,103 @@
+"use client";
+
 import Image from "next/image";
+import Timeline from "@/app/components/Timeline";
+import { useSectionContext } from "@/app/context/SectionContext";
+
+import AboutJson from "@/content/about.json";
+import {Card} from "@/app/components/Card";
+import {useOnInView} from "react-intersection-observer";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { setActiveSection } = useSectionContext();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const router = useRouter();
+
+  const handleInView = (sectionId: string) => (inView: boolean, entry: any) => {
+    if (inView) {
+      // setActiveSection(sectionId);
+      router.push(`?section=${sectionId}`, {scroll: false});
+      console.log(`Currently viewing: ${sectionId}`);
+    }
+  };
+
+  const observerOptions = {
+    threshold: 0.5,
+  };
+
+  const heroRef = useOnInView(handleInView("hero"), observerOptions);
+  const aboutRef = useOnInView(handleInView("about"), observerOptions);
+  const skillsRef = useOnInView(handleInView("skills"), observerOptions);
+  const experienceRef = useOnInView(handleInView("experience"), observerOptions);
+  const contactRef = useOnInView(handleInView("contact"), observerOptions);
+
+  return (
+    <div>
+      <section id="hero" ref={heroRef} className={"flex flex-col items-center justify-center bg-indigo-900 min-h-[calc(100dvh-2.5rem)]"}>
+        <div className={"text-center bg-black/50 p-18 border-4 border-gray-200/80"}>
+          <h1 className={"text-white text-4xl md:text-7xl"}>I'M MICHAEL CHO</h1>
+          <h2 className={"text-white text-xl md:text-4xl"}>Software developer</h2>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+      <section id="about" ref={aboutRef} className={"bg-green-900 pt-12 pb-32 px-20 xl:px-48"}>
+        <div className={"grid grid-cols-3 gap-8"}>
+          <h1 className={"col-span-3 text-center text-white text-4xl mb-4 bg-blue-300"}>About Me</h1>
+          <div className={"col-span-3 lg:col-span-2 border-amber-500 border-2"}>
+            <h3 className={"text-xl font-semibold"}>
+              Shing Kei Cho (Michael)
+              <br/>
+              <span className={"text-lg font-normal"}>
+                Software Developer
+              </span>
+            </h3>
+            <br/>
+            <p className={"whitespace-pre-line"}>{AboutJson.intro.content}</p>
+          </div>
+          <div className={"border-blue-500 border-2"}>
+            <p>testing testing testing testing testing testing testing testing testing testing testing testing testing
+              testing</p>
+          </div>
+        </div>
+      </section>
+      <section id="skills" ref={skillsRef} className={"bg-red-900 min-h-[calc(100dvh-2.5rem)] pt-12 pb-40 px-20"}>
+        <div className={"text-center text-white mb-8"}>
+          <h1 className={"text-4xl pb-2"}>Skills</h1>
+          <p className={"text-lg"}>These are the technologies I worked with the most</p>
+        </div>
+        <div className={"flex flex-wrap justify-center gap-8"}>
+          <Card name="spring" />
+          <Card name="java" />
+          <Card name="flutter" />
+          <Card name="react" />
+          <Card name="mysql" />
+          <Card name="postgresql" />
+        </div>
+      </section>
+      <section id="experience" ref={experienceRef} className={"bg-gray-700 pt-20 pb-40"}>
+        <h1 className={"col-span-3 text-center text-white text-4xl mb-4"}>Experience</h1>
+        <Timeline />
+      </section>
+      <section id="contact" ref={contactRef} className={"bg-orange-900 pt-12 pb-32 px-20 xl:px-48"}>
+        <div className={"grid grid-cols-3 gap-8"}>
+          <h1 className={"col-span-3 text-center text-white text-4xl mb-4 bg-blue-300"}>About Me</h1>
+          <div className={"col-span-3 lg:col-span-2 border-amber-500 border-2"}>
+            <h3 className={"text-xl font-semibold"}>
+              Shing Kei Cho (Michael)
+              <br/>
+              <span className={"text-lg font-normal"}>
+                Software Developer
+              </span>
+            </h3>
+            <br/>
+            <p className={"whitespace-pre-line"}>{AboutJson.intro.content}</p>
+          </div>
+          <div className={"border-blue-500 border-2"}>
+            <p>testing testing testing testing testing testing testing testing testing testing testing testing testing
+              testing</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
